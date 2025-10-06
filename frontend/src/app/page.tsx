@@ -76,44 +76,63 @@ export default function Home() {
     }
   }
 
+  
+  // pick a text color based on score
+  const scoreColor = (n: number) => {
+    if (n >= 99) return "text-amber-500 drop-shadow-[0_0_2px_rgba(251,191,36,0.6)]";      // gold for 99–100
+    if (n >= 65) return "text-emerald-600";    // green
+    if (n >= 50) return "text-yellow-500";     // yellow
+    return "text-red-600";                     // red
+  };
+
+
+
   // optional: clear error when URL changes
   useEffect(() => { if (err) setErr(null); /* eslint-disable-next-line */ }, [url]);
 
   return (
-    <main className="min-h-screen p-8 bg-gray-50">
-      <h1 className="text-3xl font-bold">Hack Anything Assistant</h1>
-      <p className="mt-1 text-gray-600 text-sm">
+    <main className="min-h-screen p-8 bg-gradient-to-br from-teal-100 via-indigo-100 to-white">
+      <div className="max-w-3xl mx-auto flex flex-col items-center text-center">
+      <h1 className="text-5xl font-extrabold tracking-tight text-black">Hack Anything Assistant — (Greg branch)</h1>
+      <p className="mt-4 text-gray-600 text-sm">
         Scan + Remediate (HSTS, CSP, CORS, Cookies, etc.). Start the AI assistant to fix issues.
       </p>
 
-      <div className="mt-6 flex flex-col gap-3 max-w-3xl">
-        <div className="flex gap-2">
+      <div className="mt-16 md:mt-20 w-full max-w-3xl mx-auto">
+        <div className="flex flex-col md:flex-row items-center justify-center gap-3">
           <input
             value={url}
             onChange={(e) => setUrl(e.target.value)}
             placeholder="https://yourdomain.com"
-            className="border px-3 py-2 rounded w-[32rem] bg-white"
-          />
-          <button
-            onClick={onScan}
-            disabled={loading || !canScan}
-            className="px-4 py-2 rounded bg-black text-white disabled:opacity-50"
-          >
-            {loading ? "Scanning…" : "Scan"}
-          </button>
-        </div>
-        {!DEMO_HOSTS.has(hostFromUrl(url)) && (
-          <Attestation checked={attest} setChecked={setAttest} />
-        )}
-      </div>
+            className="min-w-0 flex-1 w-full max-w-xl border px-4 py-3 rounded bg-white text-black placeholder:text-black shadow-sm"
+      />
+      <button
+        onClick={onScan}
+        disabled={loading || !canScan}
+        className="shrink-0 px-4 py-3 rounded bg-black text-white disabled:opacity-50"
+      >
+        {loading ? "Scanning…" : "Scan"}
+    </button>
+  </div>
+
+  {!DEMO_HOSTS.has(hostFromUrl(url)) && (
+    <div className="mt-3 text-center">
+      <Attestation checked={attest} setChecked={setAttest} />
+    </div>
+  )}
+</div>
 
       {err && <div className="mt-3 text-sm text-red-700">{err}</div>}
 
       {scan && (
         <>
-          <section className="mt-8">
+          <section className="mt-8"> 
             <div className="flex items-center gap-3">
-              <div className="text-2xl font-semibold">Score: {scan.score}</div>
+              <div className="text-2xl font-semibold">
+                <span className="text-black">Score:</span>{" "}
+                <span className={scoreColor(scan.score)}>{scan.score}</span>
+              </div>
+
               <div className="text-gray-600 text-sm">URL: {scan.url}</div>
               <button
                 onClick={startAssistant}
@@ -181,6 +200,7 @@ export default function Home() {
           </section>
         </>
       )}
+      </div>
     </main>
   );
 }

@@ -8,7 +8,7 @@ export default function Attestation({
   setChecked: (v: boolean) => void;
 }) {
   return (
-    <label className="flex items-start gap-2 text-sm">
+    <label className="flex items-start gap-2 text-sm text-slate-800 leading-5 drop-shadow-sm">
       <input
         type="checkbox"
         className="mt-1"
